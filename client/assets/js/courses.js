@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const payload = {
-      nombre: document.getElementById('nombre').value.trim(),
+      nombre: document.getElementById('nombres').value.trim(),
       descripcion: document.getElementById('descripcion').value.trim()
     };
     const id = document.getElementById('id').value;

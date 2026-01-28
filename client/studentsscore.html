@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evaluaciones</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script defer src="assets/js/api.js"></script>
+  <script defer src="assets/js/studentsscore.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>Puntajes</h1>
+    <nav><a href="dashboard.html">Volver</a></nav>
+  </header>
+  <main class="container">
+    <section>
+      <h2>Nuevo / Editar</h2>
+      <form id="formStudentScore">
+        <input type="hidden" id="id" />
+        <div class="grid">
+		  <div><label for="evaluacion">Id de la evaluacion</label><input id="evaluacion" required /></div>
+		  <div><label for="inscripcion">Id de la inscripción</label><input id="inscripcion" required /></div>
+		  <div><label for="puntaje">Puntaje Obtenido</label><input id="puntaje" required /></div>
+		  <div><label for="observacion">Observaciones</label><input id="observacion" required /></div>
+        </div>
+        <div class="actions">
+          <button type="submit">Guardar</button>
+          <button type="button" id="btnReset">Limpiar</button>
+        </div>
+      </form>
+    </section>
+    <section>
+      <h2>Listado</h2>
+    <div class="list-controls">
+      <form id="searchForm">
+        <input id="q" placeholder="Buscar evaluaciones..." />
+        <button type="submit">Buscar</button>
+      </form>
+      <div class="pager">
+        <button type="button" id="prevPage">Anterior</button>
+        <span id="pageInfo"></span>
+        <button type="button" id="nextPage">Siguiente</button>
+      </div>
+    </div>
+    
+      <table>
+        <thead><tr><th>ID</th><th>Nombre del curso</th><th>Nombre Alumno </th><th>Fecha Evaluacion</th><th>Puntaje Obtenido</th><th>Observaciones</th><th>Acciones</th></tr></thead>
+        <tbody id="tbodyStudentScore"></tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

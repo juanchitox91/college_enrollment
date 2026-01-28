@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evaluaciones</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <script defer src="assets/js/api.js"></script>
+  <script defer src="assets/js/assessments.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>Evaluaciones</h1>
+    <nav><a href="dashboard.html">Volver</a></nav>
+  </header>
+  <main class="container">
+    <section>
+      <h2>Nuevo / Editar</h2>
+      <form id="formAssessment">
+        <input type="hidden" id="id" />
+        <div class="grid">
+          <div><label for="courseId">Id del curso</label><input id="courseId" required /></div>
+		  <div><label for="nombreEvaluacion">Nombre de la evaluación</label><input id="nombreEvaluacion" required /></div>
+		  <div><label for="puntaje">Puntaje Total</label><input id="puntaje" required /></div>
+          <div><label for="fecha_evaluacion">Fecha Evaluacion</label><input id="fecha_evaluacion" type="date" /></div>
+		  <div><label for="descripcion">Descripcion</label><input id="descripcion" required /></div>
+
+        </div>
+        <div class="actions">
+          <button type="submit">Guardar</button>
+          <button type="button" id="btnReset">Limpiar</button>
+        </div>
+      </form>
+    </section>
+    <section>
+      <h2>Listado</h2>
+      
+    <div class="list-controls">
+      <form id="searchForm">
+        <input id="q" placeholder="Buscar evaluaciones..." />
+        <button type="submit">Buscar</button>
+      </form>
+      <div class="pager">
+        <button type="button" id="prevPage">Anterior</button>
+        <span id="pageInfo"></span>
+        <button type="button" id="nextPage">Siguiente</button>
+      </div>
+    </div>
+    
+      <table>
+        <thead><tr><th>ID</th><th>Id del curso</th><th>Nombre Evaluacion </th><th>Nombre Curso </th><th>Puntaje Total</th><th>Acciones</th></tr></thead>
+        <tbody id="tbodyAssessment"></tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

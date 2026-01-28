@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   await requireAuth();
-  const tbody = document.getElementById('tbodyStudents');
-  const form = document.getElementById('formStudent');
+  const tbody = document.getElementById('tbodyAssessment');
+  const form = document.getElementById('formAssessment');
   const btnReset = document.getElementById('btnReset');
 
   const qInput = document.getElementById('q');
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function load() {
     const q = encodeURIComponent(qInput.value || '');
-    const res = await apiFetch(`/api/v1/students?q=${q}&page=${page}&pageSize=${pageSize}`);
+    const res = await apiFetch(`/api/v1/assessments?q=${q}&page=${page}&pageSize=${pageSize}`);
     total = res.total;
     const items = res.items;
     tbody.innerHTML = '';
@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${s.Id}</td>
-        <td>${s.Nombres}</td>
-        <td>${s.Apellidos}</td>
-        <td>${s.Email}</td>
-        <td>${s.FechaNacimiento || ''}</td>
-		<td>${s.NumeroTelefono || ''}</td>
+        <td>${s.CourseId}</td>
+        <td>${s.Nombre || ''}</td>
+		<td>${s.NombreCurso}</td>
+        <td>${s.Puntaje}</td>
+
         <td>
           <button data-edit="${s.Id}">Editar</button>
           <button data-del="${s.Id}">Borrar</button>
@@ -44,18 +44,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const idEdit = e.target.getAttribute('data-edit');
     const idDel = e.target.getAttribute('data-del');
     if (idEdit) {
-      const s = await apiFetch('/api/v1/students/' + idEdit);
+      const s = await apiFetch('/api/v1/assessments/' + idEdit);
       document.getElementById('id').value = s.Id;
-      document.getElementById('nombre').value = s.Nombre;
-      document.getElementById('apellido').value = s.Apellido;
-      document.getElementById('email').value = s.Email;
-      document.getElementById('fecha_nacimiento').value = s.FechaNacimiento ? s.FechaNacimiento.substring(0,10) : '';
-	  document.getElementById('nro_telefono').value = s.NumeroTelefono;
+      document.getElementById('courseId').value = s.CourseId;
+      document.getElementById('nombreEvaluacion').value = s.Nombre;
+	  document.getElementById('puntaje').value = s.Puntaje;
+      document.getElementById('fecha_evaluacion').value = s.FechaEvaluacion ? s.FechaEvaluacion.substring(0,10) : ''
+	  document.getElementById('descripcion').value = s.Descripcion;
 
     }
     if (idDel) {
-      if (!confirm('¿Borrar estudiante #' + idDel + '?')) return;
-      await apiFetch('/api/v1/students/' + idDel, { method: 'DELETE' });
+      if (!confirm('¿Borrar inscripcion? #' + idDel + '?')) return;
+      await apiFetch('/api/v1/assessments/' + idDel, { method: 'DELETE' });
       await load();
     }
   });
@@ -63,17 +63,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const payload = {
-      nombre: document.getElementById('nombre').value.trim(),
-      apellido: document.getElementById('apellido').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      fechaNacimiento: document.getElementById('fecha_nacimiento').value || null,
-	  nroTelefono: document.getElementById('nro_telefono').value.trim()
+      courseId: document.getElementById('courseId').value.trim(),
+	  nombre: document.getElementById('nombreEvaluacion').value.trim(),
+      puntaje: document.getElementById('puntaje').value.trim(),
+      fechaEvaluacion: document.getElementById('fecha_evaluacion').value.trim(),
+      descripcion: document.getElementById('descripcion').value.trim(),
+	  nombreCurso : 'prueba',
+	  id : 1
+
     };
     const id = document.getElementById('id').value;
     if (id) {
-      await apiFetch('/api/v1/students/' + id, { method: 'PUT', body: JSON.stringify(payload) });
+      await apiFetch('/api/v1/assessments/' + id, { method: 'PUT', body: JSON.stringify(payload) });
     } else {
-      await apiFetch('/api/v1/students', { method: 'POST', body: JSON.stringify(payload) });
+      await apiFetch('/api/v1/assessments', { method: 'POST', body: JSON.stringify(payload) });
     }
     form.reset();
     await load();

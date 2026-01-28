@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (id) {
       await apiFetch('/api/v1/enrollments/' + id, { method: 'PUT', body: JSON.stringify(payload) });
     } else {
-      await apiFetch('/api/v1/enrollments', { method: 'POST', body: JSON.stringify(payload) });
+      await apiFetch('/api/v1/enrollment', { method: 'POST', body: JSON.stringify(payload) });
     }
     form.reset();
     await load();

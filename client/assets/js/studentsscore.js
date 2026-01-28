@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   await requireAuth();
-  const tbody = document.getElementById('tbodyStudents');
-  const form = document.getElementById('formStudent');
+  const tbody = document.getElementById('tbodyStudentScore');
+  const form = document.getElementById('formStudentScore');
   const btnReset = document.getElementById('btnReset');
 
   const qInput = document.getElementById('q');
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function load() {
     const q = encodeURIComponent(qInput.value || '');
-    const res = await apiFetch(`/api/v1/students?q=${q}&page=${page}&pageSize=${pageSize}`);
+    const res = await apiFetch(`/api/v1/studentscores?q=${q}&page=${page}&pageSize=${pageSize}`);
     total = res.total;
     const items = res.items;
     tbody.innerHTML = '';
@@ -23,11 +23,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td>${s.Id}</td>
-        <td>${s.Nombres}</td>
-        <td>${s.Apellidos}</td>
-        <td>${s.Email}</td>
-        <td>${s.FechaNacimiento || ''}</td>
-		<td>${s.NumeroTelefono || ''}</td>
+        <td>${s.NombreCurso}</td>
+        <td>${s.NombreStudent}</td>
+		<td>${s.FechaEvaluacion || ''}</td>
+		<td>${s.PuntajeObtenido}</td>
+        <td>${s.Observacinoes}</td>
+
         <td>
           <button data-edit="${s.Id}">Editar</button>
           <button data-del="${s.Id}">Borrar</button>
@@ -44,18 +45,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     const idEdit = e.target.getAttribute('data-edit');
     const idDel = e.target.getAttribute('data-del');
     if (idEdit) {
-      const s = await apiFetch('/api/v1/students/' + idEdit);
-      document.getElementById('id').value = s.Id;
-      document.getElementById('nombre').value = s.Nombre;
-      document.getElementById('apellido').value = s.Apellido;
-      document.getElementById('email').value = s.Email;
-      document.getElementById('fecha_nacimiento').value = s.FechaNacimiento ? s.FechaNacimiento.substring(0,10) : '';
-	  document.getElementById('nro_telefono').value = s.NumeroTelefono;
+      const s = await apiFetch('/api/v1/studentscores/' + idEdit);
+	  document.getElementById('id').value = s.Id;
+      document.getElementById('evaluacion').value = s.AssessmentId;
+      document.getElementById('inscripcion').value = s.EnrollmentId;
+	  document.getElementById('puntaje').value = s.PuntajeObtenido;
+	  document.getElementById('observacion').value = s.Observaciones;
 
     }
     if (idDel) {
-      if (!confirm('¿Borrar estudiante #' + idDel + '?')) return;
-      await apiFetch('/api/v1/students/' + idDel, { method: 'DELETE' });
+      if (!confirm('¿Borrar inscripcion? #' + idDel + '?')) return;
+      await apiFetch('/api/v1/studentscores/' + idDel, { method: 'DELETE' });
       await load();
     }
   });
@@ -63,17 +63,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const payload = {
-      nombre: document.getElementById('nombre').value.trim(),
-      apellido: document.getElementById('apellido').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      fechaNacimiento: document.getElementById('fecha_nacimiento').value || null,
-	  nroTelefono: document.getElementById('nro_telefono').value.trim()
+      assessmentId: document.getElementById('evaluacion').value.trim(),
+	  enrollmentId: document.getElementById('inscripcion').value.trim(),
+      puntajeObtenido: document.getElementById('puntaje').value.trim(),
+      Observacinoes: document.getElementById('observacion').value.trim(),
+	  id : 1
     };
+
     const id = document.getElementById('id').value;
     if (id) {
-      await apiFetch('/api/v1/students/' + id, { method: 'PUT', body: JSON.stringify(payload) });
+      await apiFetch('/api/v1/studentscores/' + id, { method: 'PUT', body: JSON.stringify(payload) });
     } else {
-      await apiFetch('/api/v1/students', { method: 'POST', body: JSON.stringify(payload) });
+      await apiFetch('/api/v1/studentscores', { method: 'POST', body: JSON.stringify(payload) });
     }
     form.reset();
     await load();
